@@ -1,0 +1,105 @@
+# -----------------------------------------------------------------------------
+# Name:        aggregator.py
+# Purpose:     CS 21A - implement a simple general purpose aggregator
+#
+# Author:
+# -----------------------------------------------------------------------------
+"""
+Implement a simple general purpose aggregator
+
+Usage: aggregator.py filename topic
+filename: input  file that contains a list of the online sources (urls).
+topic:  topic to be researched and reported on
+"""
+
+import urllib.request
+import urllib.error
+import re
+import sys
+
+
+def generate_output(valid_matches, link_searched, match_target):
+    """
+     Writes to output file the results of the search
+     Parameters:
+     valid_matches (string) - data recieved from the format_and_search_data
+     function
+     match_target (string) - the word we searched for, used in filename
+     generation
+     Return:
+     'Done'
+     """
+    filename = match_target + 'summary.txt'
+    end_line = '----------------------------------------\n'
+    if valid_matches == '':
+        with open(filename, 'a', encoding='utf-8') as my_file:
+            my_file.write("")
+            my_file.close()
+    else:
+        with open(filename, 'a', encoding='utf-8') as my_file:
+            my_file.write("Source url:" + '\n' + link_searched + '\n')
+            my_file.write(valid_matches + '\n')
+            my_file.write(end_line + '\n')
+            my_file.close()
+    return 'Done'
+
+
+def format_and_search_data(parsed_html, match_target):
+    """
+    capture references to the given word found in the given html code
+    Parameters:
+    parsed_html (string) - the formatted string data from the html string
+    match_target (string) - the word we are searching for
+    Return:
+    formatted_data (string) -  Words found between '>' and '<' characters
+                               from the html source string input
+    """
+    formatted_data = ''
+    # extract text inside parentheses containing the word
+    regex = r'>([^><]*\b{}\b.*?)<'.format(match_target)
+    try:
+        valid_match = re.findall(regex, parsed_html, re.IGNORECASE | re.DOTALL)
+    except:
+        valid_match = False
+    if valid_match:
+        formatted_data = '\n'.join(valid_match)
+    return formatted_data
+
+
+def read_link(desired_link):
+    """
+    capture references to the given word found in the given html code
+    Parameters:
+    desired_link
+    Return:
+    formatted_data (string) -  Words found between '>' and '<' characters
+                               from the html source string input
+    """
+    url_file = str(desired_link)
+    try:
+        with urllib.request.urlopen(desired_link) as opened_file:
+            read_file = opened_file.read().decode('UTF-8')
+            return read_file
+    except urllib.error.URLError as url_err:
+        print('Error opening url: ', url_file, url_err)
+    except UnicodeDecodeError as decode_err:
+        print('Error decoding url: ', url_file + '\n', decode_err)
+
+
+def main():
+    # Check to see if correct number of arguments have been entered by the user
+    if len(sys.argv) != 3:
+        print("Error: Invalid number of arguments" + '\n')
+        print('Usage: aggregator.py filename topic')
+        return
+    with open(sys.argv[1], 'r', encoding='utf-8') as my_file:
+        match_target = sys.argv[2]
+        for line in my_file:
+            page_data = read_link(line)
+            search_results = format_and_search_data(page_data, match_target)
+            generate_output(search_results, line, match_target)
+            continue
+
+
+if __name__ == '__main__':
+    main()

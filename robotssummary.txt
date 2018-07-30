@@ -1,0 +1,6 @@
+Source url:
+http://web.archive.org/web/20151030183532/http://ucsdnews.ucsd.edu/
+
+The Jacobs School of Engineering and Division of Social Sciences at the University of California, San Diego have launched the Contextual Robotics Institute to develop safe and useful robotics systems. These robotics systems will function in the real world based on the contextual information they perceive, in real time. Elder care and assisted living, disaster response, medicine, transportation and environmental sensing are just some of the helpful applications that could emerge from tomorrow’s human-friendly robots.
+----------------------------------------
+
