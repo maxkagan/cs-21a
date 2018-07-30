@@ -134,7 +134,7 @@ def main():
             search_results = format_and_search_data(page_data, match_target)
             desired_output = desired_output + generate_output_strings(
                 search_results, line)
-        write_to_file(desired_output, match_target)
+        return write_to_file(desired_output, match_target)
 
 
 if __name__ == '__main__':
