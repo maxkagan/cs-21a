@@ -1,8 +1,8 @@
 # -----------------------------------------------------------------------------
-# Name:        aggregator.py
+# Name: Max Kagan aggregator.py
 # Purpose:     CS 21A - implement a simple general purpose aggregator
 #
-# Author:
+# Author: Max Kagan
 # -----------------------------------------------------------------------------
 """
 Implement a simple general purpose aggregator
@@ -22,10 +22,10 @@ def generate_output(valid_matches, link_searched, match_target):
     """
      Writes to output file the results of the search
      Parameters:
-     valid_matches (string) - data recieved from the format_and_search_data
-     function
+     valid_matches (string) - data received from the format_and_search_data
+                            function
      match_target (string) - the word we searched for, used in filename
-     generation
+                             generation
      Return:
      'Done'
      """
@@ -55,7 +55,7 @@ def format_and_search_data(parsed_html, match_target):
                                from the html source string input
     """
     formatted_data = ''
-    # extract text inside parentheses containing the word
+    # extract text inside brackets containing the match target
     regex = r'>([^><]*\b{}\b.*?)<'.format(match_target)
     try:
         valid_match = re.findall(regex, parsed_html, re.IGNORECASE | re.DOTALL)
@@ -68,13 +68,17 @@ def format_and_search_data(parsed_html, match_target):
 
 def read_link(desired_link):
     """
-    capture references to the given word found in the given html code
+    Reads a url and returns html source code if able to connect to the
+    web server and decode the received data
+
     Parameters:
-    desired_link
+    desired_link (string) - String representation of a URL that we will
+                          attempt to extract html source code from
     Return:
-    formatted_data (string) -  Words found between '>' and '<' characters
-                               from the html source string input
+    read_data (string) - the decoded html file if the link was able to be read
+                         and decoded using UTF-8
     """
+
     url_file = str(desired_link)
     try:
         with urllib.request.urlopen(desired_link) as opened_file:
@@ -92,6 +96,7 @@ def main():
         print("Error: Invalid number of arguments" + '\n')
         print('Usage: aggregator.py filename topic')
         return
+    # Exceptions are caught and displayed by the functions called
     with open(sys.argv[1], 'r', encoding='utf-8') as my_file:
         match_target = sys.argv[2]
         for line in my_file:
