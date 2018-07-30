@@ -57,14 +57,12 @@ def generate_output_strings(valid_matches, link_searched):
      formatted_output (string) - a string that beautifies the output and is
                                  read directly on file output generation
      """
-
     end_line = '----------------------------------------\n'
     if valid_matches == '':
         return valid_matches
     else:
         formatted_output = ("Source url:" + '\n' + link_searched + '\n' +
                             (valid_matches + '\n') + end_line + '\n')
-
     return formatted_output
 
 
@@ -102,7 +100,6 @@ def read_link(desired_link):
     read_data (string) - the decoded html file if the link was able to be read
                          and decoded using UTF-8
     """
-
     url_file = str(desired_link)
     try:
         with urllib.request.urlopen(desired_link) as opened_file:
@@ -117,7 +114,7 @@ def read_link(desired_link):
 def main():
     """
     Reads an input file as an argument and matches search targets as the
-    second paramater
+    second parameter
     :return: An output file with the name 'match_target" + summary.txt
     """
     # Check to see if correct number of arguments have been entered by the user
