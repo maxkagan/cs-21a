@@ -19,31 +19,46 @@ import sys
 
 
 def write_to_file(output_string, match_target):
+    """
+    Writes a formatted string to an output file
+    Parameters:
+    valid_matches (string) - data received from the format_and_search_data
+                             function
+    link_searched (string) - the link we searched through that contains
+                             desired data
+    Return:
+    True or False (Bool) - True if results were found and outputted to file
+                           False if results were not found and the output
+                           file only contains a empty string
+    """
+
     filename = match_target + 'summary.txt'
     if output_string == '':
         with open(filename, 'a', encoding='utf-8') as my_file:
             my_file.write("")
             my_file.close()
+            return False
     else:
         with open(filename, 'a', encoding='utf-8') as my_file:
             my_file.write(output_string)
             my_file.close()
-    return 'done'
+    return True
 
 
 def generate_output_strings(valid_matches, link_searched):
     """
-     Writes to output file the results of the search
+     Creates string to be used in file output generation
      Parameters:
      valid_matches (string) - data received from the format_and_search_data
-                            function
-     match_target (string) - the word we searched for, used in filename
-                             generation
+                              function
+     link_searched (string) - the link we searched through that contains
+                              desired data
      Return:
-     'Done'
+     formatted_output (string) - a string that beautifies the output and is
+                                 read directly on file output generation
      """
-    end_line = '----------------------------------------\n'
 
+    end_line = '----------------------------------------\n'
     if valid_matches == '':
         return valid_matches
     else:
@@ -101,8 +116,9 @@ def read_link(desired_link):
 
 def main():
     """
-
-    :return:
+    Reads an input file as an argument and matches search targets as the
+    second paramater
+    :return: An output file with the name 'match_target" + summary.txt
     """
     # Check to see if correct number of arguments have been entered by the user
     if len(sys.argv) != 3:
@@ -118,8 +134,7 @@ def main():
             search_results = format_and_search_data(page_data, match_target)
             desired_output = desired_output + generate_output_strings(
                 search_results, line)
-            continue
-        output_file = write_to_file(desired_output, match_target)
+        write_to_file(desired_output, match_target)
 
 
 if __name__ == '__main__':
