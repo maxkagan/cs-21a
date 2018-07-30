@@ -18,7 +18,20 @@ import re
 import sys
 
 
-def generate_output(valid_matches, link_searched, match_target):
+def write_to_file(output_string, match_target):
+    filename = match_target + 'summary.txt'
+    if output_string == '':
+        with open(filename, 'a', encoding='utf-8') as my_file:
+            my_file.write("")
+            my_file.close()
+    else:
+        with open(filename, 'a', encoding='utf-8') as my_file:
+            my_file.write(output_string)
+            my_file.close()
+    return 'done'
+
+
+def generate_output_strings(valid_matches, link_searched):
     """
      Writes to output file the results of the search
      Parameters:
@@ -29,19 +42,15 @@ def generate_output(valid_matches, link_searched, match_target):
      Return:
      'Done'
      """
-    filename = match_target + 'summary.txt'
     end_line = '----------------------------------------\n'
+
     if valid_matches == '':
-        with open(filename, 'a', encoding='utf-8') as my_file:
-            my_file.write("")
-            my_file.close()
+        return valid_matches
     else:
-        with open(filename, 'a', encoding='utf-8') as my_file:
-            my_file.write("Source url:" + '\n' + link_searched + '\n')
-            my_file.write(valid_matches + '\n')
-            my_file.write(end_line + '\n')
-            my_file.close()
-    return 'Done'
+        formatted_output = ("Source url:" + '\n' + link_searched + '\n' +
+                            (valid_matches + '\n') + end_line + '\n')
+
+    return formatted_output
 
 
 def format_and_search_data(parsed_html, match_target):
@@ -91,6 +100,10 @@ def read_link(desired_link):
 
 
 def main():
+    """
+
+    :return:
+    """
     # Check to see if correct number of arguments have been entered by the user
     if len(sys.argv) != 3:
         print("Error: Invalid number of arguments" + '\n')
@@ -99,11 +112,14 @@ def main():
     # Exceptions are caught and displayed by the functions called
     with open(sys.argv[1], 'r', encoding='utf-8') as my_file:
         match_target = sys.argv[2]
+        desired_output = ''
         for line in my_file:
             page_data = read_link(line)
             search_results = format_and_search_data(page_data, match_target)
-            generate_output(search_results, line, match_target)
+            desired_output = desired_output + generate_output_strings(
+                search_results, line)
             continue
+        output_file = write_to_file(desired_output, match_target)
 
 
 if __name__ == '__main__':
