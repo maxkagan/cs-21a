@@ -115,7 +115,8 @@ def main():
     """
     Reads an input file as an argument and matches search targets as the
     second parameter
-    :return: An output file with the name 'match_target" + summary.txt
+    return: True or False (Bool) An output file with the name determined by
+             match_target + summary.txt
     """
     # Check to see if correct number of arguments have been entered by the user
     if len(sys.argv) != 3:
